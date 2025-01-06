@@ -3,149 +3,197 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redirect Page</title>
+  <title>CDed's Redirect</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      padding: 20px;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
     }
-    .folder {
-      margin: 10px 0;
-      cursor: pointer;
-      font-weight: bold;
-      color: #0078d4;
+    .navbar {
+      background: linear-gradient(90deg, #4CAF50, #00ACC1);
+      color: #fff;
     }
-    .folder:hover {
-      text-decoration: underline;
+    .navbar-brand {
+      font-weight: 600;
+      color: #fff !important;
     }
-    .content {
-      margin-left: 20px;
-      display: none;
+    .card {
+      border: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    .button {
-      display: block;
-      margin: 5px 0;
-      padding: 5px 10px;
-      background-color: #0078d4;
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: #4CAF50;
+      border: none;
+      transition: background 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: #388E3C;
+    }
+    footer {
+      background-color: #4CAF50;
       color: white;
-      text-decoration: none;
-      border-radius: 3px;
-      font-size: 14px;
-    }
-    .button:hover {
-      background-color: #005a9e;
+      text-align: center;
+      padding: 10px 0;
     }
   </style>
 </head>
 <body>
-  <h1>Redirect Page</h1>
-  <div id="folders"></div>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#">CDed's Redirect</a>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <div id="main-content"></div>
+  </div>
+
+  <footer>
+    <p>© 2025 CDed. All rights reserved.</p>
+  </footer>
 
   <script>
-    // Define folder and button structure
     const data = {
-      generic: {
-        id: "generic",
-        name: "Main",
-        folders: {
-          socials: {
-            id: "socials",
-            name: "Social",
-            folders: {},
-            buttons: {
-              facebook: {
-                id: "facebook",
-                name: "Facebook",
-                link: "https://facebook.com/myprofile"
-              }
+      "social": {
+        "youtube": {
+          "link": "https://youtube.com/@cdedkosoy"
+        },
+        "telegram": {
+          "link": "https://t.me/cdedkosoy"
+        },
+        "telegram_channel": {
+          "link": "https://t.me/cdedkosoy_official"
+        },
+        "github": {
+          "link": "https://github.com/cdedkosoy"
+        },
+        "e-mail": {
+          "link": "mcdatapacks1@gmail.com"
+        },
+        "tumblr": {
+          "link": "https://www.tumblr.com/cdedkosoy"
+        },
+        "boosty": {
+          "link": "https://boosty.to/cdedkosoy"
+        }
+      },
+      "minecraft": {
+        "datapack": {
+          "storage_stockman": {
+            "link": "https://drive.google.com/file/d/1cHAA6C5qdG_I0RDQRPBK2Vufz_xp23nb/view?usp=drivesdk"
+          },
+          "dialogus21": {
+            "link": "https://cdedkosoy.github.io/redirect/"
+          },
+          "package_manager": {
+            "link": "https://cdedkosoy.github.io/redirect/"
+          }
+        }
+      }
+    };
+
+    function displaySubgroupContent(currentData, categoryPath) {
+      let contentHTML = `<div class="container mt-5">
+        <div class="card mt-4">
+          <div class="card-header">
+            <h3 class="card-title">${categoryPath.join(' / ')}</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">`;
+      Object.entries(currentData).forEach(([subgroup, linkData]) => {
+        if (typeof linkData === 'object') {
+          contentHTML += `
+            <div class="col-md-6 mb-3">
+              <a href="#${categoryPath.join('.')}.${subgroup}" class="btn btn-primary w-100" onclick="window.location.hash = '#${categoryPath.join('.')}.${subgroup}'; setTimeout(() => { handleHashChange(); }, 0);">${subgroup}</a>
+            </div>
+          `;
+        } else {
+          contentHTML += `
+            <div class="col-md-6 mb-3">
+              <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
+            </div>
+          `;
+        }
+      });
+      contentHTML += `
+            </div>
+          </div>
+        </div>
+      </div>`;
+      document.body.innerHTML = contentHTML;
+    }
+
+    function displayInitialButtons() {
+      let buttonsHTML = '<div class="container mt-5">';
+      for (const category in data) {
+        buttonsHTML += `
+          <div class="card mt-4">
+            <div class="card-header">
+              <h3 class="card-title">${category}</h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                ${Object.entries(data[category]).map(([subcategory, linkData]) => {
+                  let buttonHTML = '';
+                  if (typeof linkData === 'object') {
+                    buttonHTML = `
+                      <div class="col-md-6 mb-3">
+                        <a href="#${category}.${subcategory}" class="btn btn-primary w-100" onclick="window.location.hash = '#${category}.${subcategory}'; setTimeout(() => { handleHashChange(); }, 0);">${subcategory}</a>
+                      </div>
+                    `;
+                  } else {
+                    buttonHTML = `
+                      <div class="col-md-6 mb-3">
+                        <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
+                      </div>
+                    `;
+                  }
+                  return buttonHTML;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      buttonsHTML += '</div>';
+      document.body.innerHTML = buttonsHTML;
+    }
+
+    function handleHashChange() {
+      const shortLink = window.location.hash.substring(1);
+      if (shortLink) {
+        const parts = shortLink.split('.');
+        if (parts.length >= 1) {
+          let currentData = data;
+          let categoryPath = [];
+          for (let i = 0; i < parts.length; i++) {
+            if (currentData[parts[i]]) {
+              currentData = currentData[parts[i]];
+              categoryPath.push(parts[i]);
+            } else {
+              currentData = null;
+              break;
             }
           }
-        },
-        buttons: {
-          youtube: {
-            id: "youtube",
-            name: "YouTube",
-            link: "https://youtube.com/@mychannelid"
+          if (currentData && currentData.link) {
+            window.location.href = currentData.link; 
+          } else {
+            displaySubgroupContent(currentData, categoryPath);
           }
         }
-      }
-    };
-
-    // Function to find the button link from the redirect path
-    function findButtonLink(redirectPath) {
-      const pathParts = redirectPath.split(".");
-      let current = data.generic;
-
-      for (const part of pathParts) {
-        if (current.folders && current.folders[part]) {
-          current = current.folders[part]; // Navigate to subfolder
-        } else if (current.buttons && current.buttons[part]) {
-          return current.buttons[part].link; // Return button's link
-        } else {
-          return null; // Path is invalid
-        }
-      }
-
-      return null; // No valid button found
-    }
-
-    // Function to render folders and buttons
-    function renderFolder(folder, container, prefix = "") {
-      // Render subfolders
-      for (let key in folder.folders) {
-        const subFolder = folder.folders[key];
-        const folderDiv = document.createElement("div");
-        folderDiv.classList.add("folder");
-        folderDiv.textContent = subFolder.name;
-        folderDiv.setAttribute("data-folder-id", `${prefix}${subFolder.id}`);
-
-        const contentDiv = document.createElement("div");
-        contentDiv.classList.add("content");
-
-        folderDiv.onclick = () => {
-          contentDiv.style.display = contentDiv.style.display === "none" ? "block" : "none";
-        };
-
-        container.appendChild(folderDiv);
-        container.appendChild(contentDiv);
-
-        renderFolder(subFolder, contentDiv, `${prefix}${subFolder.id}.`);
-      }
-
-      // Render buttons
-      for (let key in folder.buttons) {
-        const button = folder.buttons[key];
-        const buttonElement = document.createElement("a");
-        buttonElement.classList.add("button");
-        buttonElement.href = button.link;
-        buttonElement.textContent = button.name;
-        container.appendChild(buttonElement);
+      } else {
+        displayInitialButtons();
       }
     }
 
-    // Function to handle query-based redirection
-    function redirectByQuery() {
-      const params = new URLSearchParams(window.location.search);
-      const redirectPath = params.get("redirect");
-
-      if (redirectPath) {
-        const link = findButtonLink(redirectPath);
-
-        if (link) {
-          window.location.href = link; // Redirect to the button's link
-        } else {
-          console.error("Invalid redirect path:", redirectPath);
-        }
-      }
-    }
-
-    // Initialize the page
-    window.onload = () => {
-      const foldersContainer = document.getElementById("folders");
-      renderFolder(data.generic, foldersContainer);
-      redirectByQuery();
-    };
+    handleHashChange();
   </script>
 </body>
 </html>
