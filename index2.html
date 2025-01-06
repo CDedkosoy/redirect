@@ -72,6 +72,24 @@
       }
     };
 
+    // Function to find the button link from the redirect path
+    function findButtonLink(redirectPath) {
+      const pathParts = redirectPath.split(".");
+      let current = data.generic;
+
+      for (const part of pathParts) {
+        if (current.folders && current.folders[part]) {
+          current = current.folders[part]; // Navigate to subfolder
+        } else if (current.buttons && current.buttons[part]) {
+          return current.buttons[part].link; // Return button's link
+        } else {
+          return null; // Path is invalid
+        }
+      }
+
+      return null; // No valid button found
+    }
+
     // Function to render folders and buttons
     function renderFolder(folder, container, prefix = "") {
       // Render subfolders
@@ -106,25 +124,18 @@
       }
     }
 
-    // Function to redirect based on query parameter
+    // Function to handle query-based redirection
     function redirectByQuery() {
       const params = new URLSearchParams(window.location.search);
       const redirectPath = params.get("redirect");
 
       if (redirectPath) {
-        const pathParts = redirectPath.split(".");
-        let current = data.generic;
+        const link = findButtonLink(redirectPath);
 
-        for (const part of pathParts) {
-          if (current.folders && current.folders[part]) {
-            current = current.folders[part];
-          } else if (current.buttons && current.buttons[part]) {
-            window.location.href = current.buttons[part].link;
-            return;
-          } else {
-            console.error("Invalid path:", redirectPath);
-            return;
-          }
+        if (link) {
+          window.location.href = link; // Redirect to the button's link
+        } else {
+          console.error("Invalid redirect path:", redirectPath);
         }
       }
     }
