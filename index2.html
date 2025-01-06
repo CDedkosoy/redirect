@@ -5,204 +5,192 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CDed's Redirect</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap">
+  <link rel="shortcut icon" href="https://www.favicon-generator.org/download/2024-10-28/51c1505984b2c53faa6422beaa4e5d06.ico">
+  <link rel="icon" href="https://www.favicon-generator.org/download/2024-10-28/51c1505984b2c53faa6422beaa4e5d06.ico">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f4f6f9;
-      color: #333;
+    html, body {
+      height: 100%;
+      margin: 0;
     }
-    .navbar {
-      background: linear-gradient(90deg, #4CAF50, #00ACC1);
-      color: #fff;
+
+    .min-vh-100 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-    .navbar-brand {
-      font-weight: 600;
-      color: #fff !important;
+
+    .flex-grow-1 {
+      flex-grow: 1;
     }
-    .card {
-      border: none;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .card-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-    .btn-primary {
-      background: #4CAF50;
-      border: none;
-      transition: background 0.3s ease;
-    }
-    .btn-primary:hover {
-      background: #388E3C;
-    }
+
     footer {
       background-color: #4CAF50;
       color: white;
-      text-align: center;
-      padding: 10px 0;
     }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <a class="navbar-brand" href="#">CDed's Redirect</a>
-    </div>
-  </nav>
+  <div class="d-flex flex-column min-vh-100">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="#">CDed's Redirect</a>
+      </div>
+    </nav>
 
-  <div class="container mt-5">
-    <div id="main-content"></div>
+    <!-- Main Content -->
+    <main id="main-content" class="flex-grow-1"></main>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white text-center py-3">
+      <p class="mb-0">© 2025 CDed. All rights reserved.</p>
+    </footer>
   </div>
 
-  <footer>
-    <p>© 2025 CDed. All rights reserved.</p>
-  </footer>
-
   <script>
-  const data = {
-    "social": {
-      "youtube": {
-        "link": "https://youtube.com/@cdedkosoy"
-      },
-      "telegram": {
-        "link": "https://t.me/cdedkosoy"
-      },
-      "telegram_channel": {
-        "link": "https://t.me/cdedkosoy_official"
-      },
-      "github": {
-        "link": "https://github.com/cdedkosoy"
-      },
-      "e-mail": {
-        "link": "mcdatapacks1@gmail.com"
-      },
-      "tumblr": {
-        "link": "https://www.tumblr.com/cdedkosoy"
-      },
-      "boosty": {
-        "link": "https://boosty.to/cdedkosoy"
-      }
-    },
-    "minecraft": {
-      "datapack": {
-        "storage_stockman": {
-          "link": "https://drive.google.com/file/d/1cHAA6C5qdG_I0RDQRPBK2Vufz_xp23nb/view?usp=drivesdk"
+    const data = {
+      "social": {
+        "youtube": {
+          "link": "https://youtube.com/@cdedkosoy"
         },
-        "dialogus21": {
-          "link": "https://cdedkosoy.github.io/redirect/"
+        "telegram": {
+          "link": "https://t.me/cdedkosoy"
         },
-        "package_manager": {
-          "link": "https://cdedkosoy.github.io/redirect/"
+        "telegram_channel": {
+          "link": "https://t.me/cdedkosoy_official"
+        },
+        "github": {
+          "link": "https://github.com/cdedkosoy"
+        },
+        "e-mail": {
+          "link": "mailto:mcdatapacks1@gmail.com"
+        },
+        "tumblr": {
+          "link": "https://www.tumblr.com/cdedkosoy"
+        },
+        "boosty": {
+          "link": "https://boosty.to/cdedkosoy"
+        }
+      },
+      "minecraft": {
+        "datapack": {
+          "storage_stockman": {
+            "link": "https://drive.google.com/file/d/1cHAA6C5qdG_I0RDQRPBK2Vufz_xp23nb/view?usp=drivesdk"
+          },
+          "dialogus21": {
+            "link": "https://cdedkosoy.github.io/redirect/"
+          },
+          "package_manager": {
+            "link": "https://cdedkosoy.github.io/redirect/"
+          }
         }
       }
-    }
-  };
+    };
 
-  function displaySubgroupContent(currentData, categoryPath) {
-    let contentHTML = `<div class="container mt-5">
-      <div class="card mt-4">
-        <div class="card-header">
-          <h3 class="card-title">${categoryPath.join(' / ')}</h3>
-        </div>
-        <div class="card-body">
-          <div class="row">`;
-    Object.entries(currentData).forEach(([subgroup, linkData]) => {
-      if (typeof linkData === 'object') {
-        contentHTML += `
-          <div class="col-md-6 mb-3">
-            <a href="#${categoryPath.join('.')}.${subgroup}" class="btn btn-primary w-100" onclick="navigateToSubgroup('${categoryPath.join('.')}.${subgroup}')">${subgroup}</a>
-          </div>
-        `;
-      } else {
-        contentHTML += `
-          <div class="col-md-6 mb-3">
-            <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
-          </div>
-        `;
-      }
-    });
-    contentHTML += `
-          </div>
-        </div>
-      </div>
-    </div>`;
-    document.getElementById('main-content').innerHTML = contentHTML;
-  }
-
-  function displayInitialButtons() {
-    let buttonsHTML = '<div class="container mt-5">';
-    for (const category in data) {
-      buttonsHTML += `
+    function displaySubgroupContent(currentData, categoryPath) {
+      let contentHTML = `<div class="container mt-5">
         <div class="card mt-4">
           <div class="card-header">
-            <h3 class="card-title">${category}</h3>
+            <h3 class="card-title">${categoryPath.join(' / ')}</h3>
           </div>
           <div class="card-body">
-            <div class="row">
-              ${Object.entries(data[category]).map(([subcategory, linkData]) => {
-                let buttonHTML = '';
-                if (typeof linkData === 'object') {
-                  buttonHTML = `
-                    <div class="col-md-6 mb-3">
-                      <a href="#${category}.${subcategory}" class="btn btn-primary w-100" onclick="navigateToSubgroup('${category}.${subcategory}')">${subcategory}</a>
-                    </div>
-                  `;
-                } else {
-                  buttonHTML = `
-                    <div class="col-md-6 mb-3">
-                      <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
-                    </div>
-                  `;
-                }
-                return buttonHTML;
-              }).join('')}
+            <div class="row">`;
+      Object.entries(currentData).forEach(([subgroup, linkData]) => {
+        if (typeof linkData === 'object') {
+          contentHTML += `
+            <div class="col-md-6 mb-3">
+              <a href="#${categoryPath.join('.')}.${subgroup}" class="btn btn-primary w-100" onclick="navigateToSubgroup('${categoryPath.join('.')}.${subgroup}')">${subgroup}</a>
+            </div>
+          `;
+        } else {
+          contentHTML += `
+            <div class="col-md-6 mb-3">
+              <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
+            </div>
+          `;
+        }
+      });
+      contentHTML += `
             </div>
           </div>
         </div>
-      `;
+      </div>`;
+      document.getElementById('main-content').innerHTML = contentHTML;
     }
-    buttonsHTML += '</div>';
-    document.getElementById('main-content').innerHTML = buttonsHTML;
-  }
 
-  function navigateToSubgroup(hash) {
-    window.location.hash = `#${hash}`;
-    setTimeout(() => handleHashChange(), 0);
-  }
+    function displayInitialButtons() {
+      let buttonsHTML = '<div class="container mt-5">';
+      for (const category in data) {
+        buttonsHTML += `
+          <div class="card mt-4">
+            <div class="card-header">
+              <h3 class="card-title">${category}</h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                ${Object.entries(data[category]).map(([subcategory, linkData]) => {
+                  let buttonHTML = '';
+                  if (typeof linkData === 'object') {
+                    buttonHTML = `
+                      <div class="col-md-6 mb-3">
+                        <a href="#${category}.${subcategory}" class="btn btn-primary w-100" onclick="navigateToSubgroup('${category}.${subcategory}')">${subcategory}</a>
+                      </div>
+                    `;
+                  } else {
+                    buttonHTML = `
+                      <div class="col-md-6 mb-3">
+                        <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
+                      </div>
+                    `;
+                  }
+                  return buttonHTML;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      buttonsHTML += '</div>';
+      document.getElementById('main-content').innerHTML = buttonsHTML;
+    }
 
-  function handleHashChange() {
-    const shortLink = window.location.hash.substring(1);
-    if (shortLink) {
-      const parts = shortLink.split('.');
-      if (parts.length >= 1) {
-        let currentData = data;
-        let categoryPath = [];
-        for (let i = 0; i < parts.length; i++) {
-          if (currentData[parts[i]]) {
-            currentData = currentData[parts[i]];
-            categoryPath.push(parts[i]);
+    function navigateToSubgroup(hash) {
+      window.location.hash = `#${hash}`;
+      setTimeout(() => handleHashChange(), 0);
+    }
+
+    function handleHashChange() {
+      const shortLink = window.location.hash.substring(1);
+      if (shortLink) {
+        const parts = shortLink.split('.');
+        if (parts.length >= 1) {
+          let currentData = data;
+          let categoryPath = [];
+          for (let i = 0; i < parts.length; i++) {
+            if (currentData[parts[i]]) {
+              currentData = currentData[parts[i]];
+              categoryPath.push(parts[i]);
+            } else {
+              currentData = null;
+              break;
+            }
+          }
+          if (currentData && currentData.link) {
+            window.location.href = currentData.link;
           } else {
-            currentData = null;
-            break;
+            displaySubgroupContent(currentData, categoryPath);
           }
         }
-        if (currentData && currentData.link) {
-          window.location.href = currentData.link;
-        } else {
-          displaySubgroupContent(currentData, categoryPath);
-        }
+      } else {
+        displayInitialButtons();
       }
-    } else {
-      displayInitialButtons();
     }
-  }
 
-  // Ensure navigation updates content on back/forward button press
-  window.addEventListener('popstate', handleHashChange);
+    // Ensure navigation updates content on back/forward button press
+    window.addEventListener('popstate', handleHashChange);
 
-  // Load initial content
-  handleHashChange();
-</script>
+    // Load initial content
+    handleHashChange();
+  </script>
 </body>
 </html>
