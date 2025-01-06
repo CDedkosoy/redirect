@@ -7,48 +7,48 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
   <link rel="shortcut icon" href="https://www.favicon-generator.org/download/2024-10-28/51c1505984b2c53faa6422beaa4e5d06.ico">
   <link rel="icon" href="https://www.favicon-generator.org/download/2024-10-28/51c1505984b2c53faa6422beaa4e5d06.ico">
-<style>
-  html, body {
-    height: 100%;
-    margin: 0;
-  }
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
 
-  .min-vh-100 {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+    .min-vh-100 {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-  .flex-grow-1 {
-    flex-grow: 1;
-  }
+    .flex-grow-1 {
+      flex-grow: 1;
+    }
 
-  nav.navbar {
-    background: linear-gradient(90deg, #4CAF50, #2196F3); /* Cool gradient */
-    color: white;
-  }
+    nav.navbar {
+      background: linear-gradient(90deg, #4CAF50, #2196F3);
+      color: white;
+    }
 
-  nav.navbar a.navbar-brand {
-    color: white !important; /* Make the text stand out */
-    font-weight: bold;
-    font-size: 1.5rem;
-  }
+    nav.navbar a.navbar-brand {
+      color: white !important;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
 
-  nav.navbar a.navbar-brand:hover {
-    text-decoration: none;
-    opacity: 0.9; /* Slight hover effect */
-  }
+    nav.navbar a.navbar-brand:hover {
+      text-decoration: none;
+      opacity: 0.9;
+    }
 
-  footer {
-    background: linear-gradient(90deg, #4CAF50, #2196F3); /* Gradient for footer */
-    color: white;
-    text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
-  }
+    footer {
+      background: linear-gradient(90deg, #4CAF50, #2196F3);
+      color: white;
+      text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+    }
 
-  footer p {
-    margin: 0;
-  }
-</style>
+    footer p {
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
   <div class="d-flex flex-column min-vh-100">
@@ -63,121 +63,132 @@
     <main id="main-content" class="flex-grow-1"></main>
 
     <!-- Footer -->
-    <footer class="bg-primary text-white text-center py-3">
+    <footer class="text-center py-3">
       <p class="mb-0">© 2025 CDed. All rights reserved.</p>
     </footer>
   </div>
 
   <script>
     const data = {
-      "social": {
-        "youtube": {
-          "link": "https://youtube.com/@cdedkosoy"
+      name: "Root",
+      id: "root",
+      folders: {
+        folder1: {
+          name: "Social Media",
+          id: "social",
+          folders: {},
+          buttons: {
+            youtube: {
+              name: "YouTube",
+              id: "youtube",
+              link: "https://youtube.com/@cdedkosoy"
+            },
+            github: {
+              name: "GitHub",
+              id: "github",
+              link: "https://github.com/cdedkosoy"
+            }
+          }
         },
-        "telegram": {
-          "link": "https://t.me/cdedkosoy"
-        },
-        "telegram_channel": {
-          "link": "https://t.me/cdedkosoy_official"
-        },
-        "github": {
-          "link": "https://github.com/cdedkosoy"
-        },
-        "e-mail": {
-          "link": "mailto:mcdatapacks1@gmail.com"
-        },
-        "tumblr": {
-          "link": "https://www.tumblr.com/cdedkosoy"
-        },
-        "boosty": {
-          "link": "https://boosty.to/cdedkosoy"
+        folder2: {
+          name: "Minecraft",
+          id: "minecraft",
+          folders: {
+            datapacks: {
+              name: "Datapacks",
+              id: "datapacks",
+              folders: {},
+              buttons: {
+                stockman: {
+                  name: "Storage Stockman",
+                  id: "stockman",
+                  link: "https://drive.google.com/file/d/1cHAA6C5qdG_I0RDQRPBK2Vufz_xp23nb/view?usp=drivesdk"
+                }
+              }
+            }
+          },
+          buttons: {}
         }
       },
-      "minecraft": {
-        "datapack": {
-          "storage_stockman": {
-            "link": "https://drive.google.com/file/d/1cHAA6C5qdG_I0RDQRPBK2Vufz_xp23nb/view?usp=drivesdk"
-          },
-          "dialogus21": {
-            "link": "https://cdedkosoy.github.io/redirect/"
-          },
-          "package_manager": {
-            "link": "https://cdedkosoy.github.io/redirect/"
-          }
-        }
-      }
+      buttons: {}
     };
 
+    // Function to display content based on the node
     function displayContent(node, path = []) {
-  let contentHTML = `<div class="container mt-5">
-    <div class="card mt-4">
-      <div class="card-header">
-        <h3 class="card-title">${path.join(" / ") || "Home"}</h3>
-      </div>
-      <div class="card-body">
-        <div class="row">`;
+      let contentHTML = `<div class="container mt-5">
+        <div class="card mt-4">
+          <div class="card-header">
+            <h3 class="card-title">${path.join(" / ") || "Home"}</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">`;
 
-  // Render folders
-  for (const folderId in node.folders) {
-    const folder = node.folders[folderId];
-    contentHTML += `
-      <div class="col-md-6 mb-3">
-        <a href="#${[...path, folder.id].join(".")}" class="btn btn-primary w-100" onclick="navigateToNode('${[...path, folder.id].join(".")}')">
-          ${folder.name}
-        </a>
-      </div>`;
-  }
+      // Render folders
+      for (const folderId in node.folders) {
+        const folder = node.folders[folderId];
+        contentHTML += `
+          <div class="col-md-6 mb-3">
+            <a href="#${[...path, folder.id].join(".")}" class="btn btn-primary w-100" onclick="navigateToNode('${[...path, folder.id].join(".")}')">
+              ${folder.name}
+            </a>
+          </div>`;
+      }
 
-  // Render buttons
-  for (const buttonId in node.buttons) {
-    const button = node.buttons[buttonId];
-    contentHTML += `
-      <div class="col-md-6 mb-3">
-        <a href="${button.link}" class="btn btn-success w-100" target="_blank">
-          ${button.name}
-        </a>
-      </div>`;
-  }
+      // Render buttons
+      for (const buttonId in node.buttons) {
+        const button = node.buttons[buttonId];
+        contentHTML += `
+          <div class="col-md-6 mb-3">
+            <a href="${button.link}" class="btn btn-success w-100" target="_blank">
+              ${button.name}
+            </a>
+          </div>`;
+      }
 
-  contentHTML += `
+      contentHTML += `
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>`;
+      </div>`;
 
-  document.getElementById("main-content").innerHTML = contentHTML;
-}
-
-function navigateToNode(hash) {
-  const parts = hash.split(".");
-  let currentNode = data;
-  let path = [];
-
-  for (const part of parts) {
-    if (currentNode.folders[part]) {
-      currentNode = currentNode.folders[part];
-      path.push(currentNode.name);
-    } else {
-      console.error("Invalid path");
-      return;
+      document.getElementById("main-content").innerHTML = contentHTML;
     }
-  }
 
-  displayContent(currentNode, path);
-}
+    // Function to navigate to a specific node (folder or button)
+    function navigateToNode(hash) {
+      const parts = hash.split(".");
+      let currentNode = data;
+      let path = [];
 
-function handleHashChange() {
-  const hash = window.location.hash.substring(1);
-  if (hash) {
-    navigateToNode(hash);
-  } else {
-    displayContent(data);
-  }
-}
+      // Navigate down the data structure based on hash
+      for (const part of parts) {
+        if (currentNode.folders[part]) {
+          currentNode = currentNode.folders[part];
+          path.push(currentNode.name);
+        } else {
+          console.error("Invalid path");
+          return;
+        }
+      }
 
-handleHashChange();
+      displayContent(currentNode, path);
+    }
 
-window.addEventListener("hashchange", handleHashChange);
+    // Handle the page load or hash change
+    function handleHashChange() {
+      const hash = window.location.hash.substring(1);
+      if (hash) {
+        navigateToNode(hash);
+      } else {
+        displayContent(data);
+      }
+    }
+
+    // Run the initial content load
+    handleHashChange();
+
+    // Listen for hash changes (navigation)
+    window.addEventListener("hashchange", handleHashChange);
   </script>
 </body>
 </html>
