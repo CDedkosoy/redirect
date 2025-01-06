@@ -60,140 +60,149 @@
   </footer>
 
   <script>
-    const data = {
-      "social": {
-        "youtube": {
-          "link": "https://youtube.com/@cdedkosoy"
-        },
-        "telegram": {
-          "link": "https://t.me/cdedkosoy"
-        },
-        "telegram_channel": {
-          "link": "https://t.me/cdedkosoy_official"
-        },
-        "github": {
-          "link": "https://github.com/cdedkosoy"
-        },
-        "e-mail": {
-          "link": "mcdatapacks1@gmail.com"
-        },
-        "tumblr": {
-          "link": "https://www.tumblr.com/cdedkosoy"
-        },
-        "boosty": {
-          "link": "https://boosty.to/cdedkosoy"
-        }
+  const data = {
+    "social": {
+      "youtube": {
+        "link": "https://youtube.com/@cdedkosoy"
       },
-      "minecraft": {
-        "datapack": {
-          "storage_stockman": {
-            "link": "https://drive.google.com/file/d/1cHAA6C5qdG_I0RDQRPBK2Vufz_xp23nb/view?usp=drivesdk"
-          },
-          "dialogus21": {
-            "link": "https://cdedkosoy.github.io/redirect/"
-          },
-          "package_manager": {
-            "link": "https://cdedkosoy.github.io/redirect/"
-          }
+      "telegram": {
+        "link": "https://t.me/cdedkosoy"
+      },
+      "telegram_channel": {
+        "link": "https://t.me/cdedkosoy_official"
+      },
+      "github": {
+        "link": "https://github.com/cdedkosoy"
+      },
+      "e-mail": {
+        "link": "mcdatapacks1@gmail.com"
+      },
+      "tumblr": {
+        "link": "https://www.tumblr.com/cdedkosoy"
+      },
+      "boosty": {
+        "link": "https://boosty.to/cdedkosoy"
+      }
+    },
+    "minecraft": {
+      "datapack": {
+        "storage_stockman": {
+          "link": "https://drive.google.com/file/d/1cHAA6C5qdG_I0RDQRPBK2Vufz_xp23nb/view?usp=drivesdk"
+        },
+        "dialogus21": {
+          "link": "https://cdedkosoy.github.io/redirect/"
+        },
+        "package_manager": {
+          "link": "https://cdedkosoy.github.io/redirect/"
         }
       }
-    };
-
-    function displaySubgroupContent(currentData, categoryPath) {
-      let contentHTML = `<div class="container mt-5">
-        <div class="card mt-4">
-          <div class="card-header">
-            <h3 class="card-title">${categoryPath.join(' / ')}</h3>
-          </div>
-          <div class="card-body">
-            <div class="row">`;
-      Object.entries(currentData).forEach(([subgroup, linkData]) => {
-        if (typeof linkData === 'object') {
-          contentHTML += `
-            <div class="col-md-6 mb-3">
-              <a href="#${categoryPath.join('.')}.${subgroup}" class="btn btn-primary w-100" onclick="window.location.hash = '#${categoryPath.join('.')}.${subgroup}'; setTimeout(() => { handleHashChange(); }, 0);">${subgroup}</a>
-            </div>
-          `;
-        } else {
-          contentHTML += `
-            <div class="col-md-6 mb-3">
-              <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
-            </div>
-          `;
-        }
-      });
-      contentHTML += `
-            </div>
-          </div>
-        </div>
-      </div>`;
-      document.body.innerHTML = contentHTML;
     }
+  };
 
-    function displayInitialButtons() {
-      let buttonsHTML = '<div class="container mt-5">';
-      for (const category in data) {
-        buttonsHTML += `
-          <div class="card mt-4">
-            <div class="card-header">
-              <h3 class="card-title">${category}</h3>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                ${Object.entries(data[category]).map(([subcategory, linkData]) => {
-                  let buttonHTML = '';
-                  if (typeof linkData === 'object') {
-                    buttonHTML = `
-                      <div class="col-md-6 mb-3">
-                        <a href="#${category}.${subcategory}" class="btn btn-primary w-100" onclick="window.location.hash = '#${category}.${subcategory}'; setTimeout(() => { handleHashChange(); }, 0);">${subcategory}</a>
-                      </div>
-                    `;
-                  } else {
-                    buttonHTML = `
-                      <div class="col-md-6 mb-3">
-                        <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
-                      </div>
-                    `;
-                  }
-                  return buttonHTML;
-                }).join('')}
-              </div>
-            </div>
+  function displaySubgroupContent(currentData, categoryPath) {
+    let contentHTML = `<div class="container mt-5">
+      <div class="card mt-4">
+        <div class="card-header">
+          <h3 class="card-title">${categoryPath.join(' / ')}</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">`;
+    Object.entries(currentData).forEach(([subgroup, linkData]) => {
+      if (typeof linkData === 'object') {
+        contentHTML += `
+          <div class="col-md-6 mb-3">
+            <a href="#${categoryPath.join('.')}.${subgroup}" class="btn btn-primary w-100" onclick="navigateToSubgroup('${categoryPath.join('.')}.${subgroup}')">${subgroup}</a>
+          </div>
+        `;
+      } else {
+        contentHTML += `
+          <div class="col-md-6 mb-3">
+            <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
           </div>
         `;
       }
-      buttonsHTML += '</div>';
-      document.body.innerHTML = buttonsHTML;
-    }
+    });
+    contentHTML += `
+          </div>
+        </div>
+      </div>
+    </div>`;
+    document.getElementById('main-content').innerHTML = contentHTML;
+  }
 
-    function handleHashChange() {
-      const shortLink = window.location.hash.substring(1);
-      if (shortLink) {
-        const parts = shortLink.split('.');
-        if (parts.length >= 1) {
-          let currentData = data;
-          let categoryPath = [];
-          for (let i = 0; i < parts.length; i++) {
-            if (currentData[parts[i]]) {
-              currentData = currentData[parts[i]];
-              categoryPath.push(parts[i]);
-            } else {
-              currentData = null;
-              break;
-            }
-          }
-          if (currentData && currentData.link) {
-            window.location.href = currentData.link; 
+  function displayInitialButtons() {
+    let buttonsHTML = '<div class="container mt-5">';
+    for (const category in data) {
+      buttonsHTML += `
+        <div class="card mt-4">
+          <div class="card-header">
+            <h3 class="card-title">${category}</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              ${Object.entries(data[category]).map(([subcategory, linkData]) => {
+                let buttonHTML = '';
+                if (typeof linkData === 'object') {
+                  buttonHTML = `
+                    <div class="col-md-6 mb-3">
+                      <a href="#${category}.${subcategory}" class="btn btn-primary w-100" onclick="navigateToSubgroup('${category}.${subcategory}')">${subcategory}</a>
+                    </div>
+                  `;
+                } else {
+                  buttonHTML = `
+                    <div class="col-md-6 mb-3">
+                      <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
+                    </div>
+                  `;
+                }
+                return buttonHTML;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    buttonsHTML += '</div>';
+    document.getElementById('main-content').innerHTML = buttonsHTML;
+  }
+
+  function navigateToSubgroup(hash) {
+    window.location.hash = `#${hash}`;
+    setTimeout(() => handleHashChange(), 0);
+  }
+
+  function handleHashChange() {
+    const shortLink = window.location.hash.substring(1);
+    if (shortLink) {
+      const parts = shortLink.split('.');
+      if (parts.length >= 1) {
+        let currentData = data;
+        let categoryPath = [];
+        for (let i = 0; i < parts.length; i++) {
+          if (currentData[parts[i]]) {
+            currentData = currentData[parts[i]];
+            categoryPath.push(parts[i]);
           } else {
-            displaySubgroupContent(currentData, categoryPath);
+            currentData = null;
+            break;
           }
         }
-      } else {
-        displayInitialButtons();
+        if (currentData && currentData.link) {
+          window.location.href = currentData.link;
+        } else {
+          displaySubgroupContent(currentData, categoryPath);
+        }
       }
+    } else {
+      displayInitialButtons();
     }
+  }
 
-    handleHashChange();
-  </script>
+  // Ensure navigation updates content on back/forward button press
+  window.addEventListener('popstate', handleHashChange);
+
+  // Load initial content
+  handleHashChange();
+</script>
 </body>
 </html>
