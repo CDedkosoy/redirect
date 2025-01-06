@@ -9,17 +9,29 @@
       font-family: Arial, sans-serif;
       background-color: #f4f4f9;
       padding: 20px;
-      text-align: center;
+    }
+    .folder {
+      margin: 10px 0;
+      cursor: pointer;
+      font-weight: bold;
+      color: #0078d4;
+    }
+    .folder:hover {
+      text-decoration: underline;
+    }
+    .content {
+      margin-left: 20px;
+      display: none;
     }
     .button {
-      display: inline-block;
-      margin: 10px;
-      padding: 10px 20px;
+      display: block;
+      margin: 5px 0;
+      padding: 5px 10px;
       background-color: #0078d4;
       color: white;
       text-decoration: none;
-      border-radius: 5px;
-      font-size: 16px;
+      border-radius: 3px;
+      font-size: 14px;
     }
     .button:hover {
       background-color: #005a9e;
@@ -28,23 +40,19 @@
 </head>
 <body>
   <h1>Redirect Page</h1>
-  <div id="buttons"></div>
+  <div id="folders"></div>
 
   <script>
-    // Define the button and folder data structure
+    // Define folder and button structure
     const data = {
       generic: {
         id: "generic",
-        buttons: {
-          youtube: {
-            id: "youtube",
-            name: "YouTube",
-            link: "https://youtube.com/@mychannelid"
-          }
-        },
+        name: "Main",
         folders: {
           socials: {
             id: "socials",
+            name: "Social",
+            folders: {},
             buttons: {
               facebook: {
                 id: "facebook",
@@ -53,47 +61,52 @@
               }
             }
           }
+        },
+        buttons: {
+          youtube: {
+            id: "youtube",
+            name: "YouTube",
+            link: "https://youtube.com/@mychannelid"
+          }
         }
       }
     };
 
-    // Function to create a flat list of buttons for rendering
-    function getAllButtons(folder, prefix = "") {
-      const buttons = [];
+    // Function to render folders and buttons
+    function renderFolder(folder, container, prefix = "") {
+      // Render subfolders
+      for (let key in folder.folders) {
+        const subFolder = folder.folders[key];
+        const folderDiv = document.createElement("div");
+        folderDiv.classList.add("folder");
+        folderDiv.textContent = subFolder.name;
+        folderDiv.setAttribute("data-folder-id", `${prefix}${subFolder.id}`);
 
-      // Add buttons in the current folder
-      for (const key in folder.buttons) {
+        const contentDiv = document.createElement("div");
+        contentDiv.classList.add("content");
+
+        folderDiv.onclick = () => {
+          contentDiv.style.display = contentDiv.style.display === "none" ? "block" : "none";
+        };
+
+        container.appendChild(folderDiv);
+        container.appendChild(contentDiv);
+
+        renderFolder(subFolder, contentDiv, `${prefix}${subFolder.id}.`);
+      }
+
+      // Render buttons
+      for (let key in folder.buttons) {
         const button = folder.buttons[key];
-        buttons.push({
-          ...button,
-          id: `${prefix}${button.id}`
-        });
-      }
-
-      // Recursively add buttons from subfolders
-      for (const key in folder.folders) {
-        const subfolder = folder.folders[key];
-        buttons.push(...getAllButtons(subfolder, `${prefix}${key}.`));
-      }
-
-      return buttons;
-    }
-
-    // Render buttons on the page
-    function renderButtons() {
-      const buttonsContainer = document.getElementById("buttons");
-      const allButtons = getAllButtons(data.generic);
-
-      allButtons.forEach((button) => {
         const buttonElement = document.createElement("a");
+        buttonElement.classList.add("button");
         buttonElement.href = button.link;
         buttonElement.textContent = button.name;
-        buttonElement.className = "button";
-        buttonsContainer.appendChild(buttonElement);
-      });
+        container.appendChild(buttonElement);
+      }
     }
 
-    // Redirect based on the query parameter
+    // Function to redirect based on query parameter
     function redirectByQuery() {
       const params = new URLSearchParams(window.location.search);
       const redirectPath = params.get("redirect");
@@ -118,7 +131,8 @@
 
     // Initialize the page
     window.onload = () => {
-      renderButtons();
+      const foldersContainer = document.getElementById("folders");
+      renderFolder(data.generic, foldersContainer);
       redirectByQuery();
     };
   </script>
