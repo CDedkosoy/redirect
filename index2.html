@@ -30,7 +30,7 @@
   <div id="content"></div>
 
   <script>
-    // Example data structure for folders and buttons
+    // Define the folder and button structure
     const data = {
       generic: {
         id: "generic",
@@ -39,6 +39,7 @@
           socials: {
             id: "socials",
             name: "Social",
+            folders: {},
             buttons: {
               facebook: {
                 id: "facebook",
@@ -58,19 +59,21 @@
       }
     };
 
-    // Function to display folders and buttons
+    // Function to render folders and buttons dynamically
     function renderUI(container, folder) {
-      for (let key in folder.folders) {
-        const subFolder = folder.folders[key];
+      // Render folders
+      for (let folderKey in folder.folders) {
+        const subFolder = folder.folders[folderKey];
         const folderDiv = document.createElement("div");
         folderDiv.classList.add("folder");
         folderDiv.textContent = subFolder.name;
         container.appendChild(folderDiv);
-        renderUI(folderDiv, subFolder); // Recursive call for nested folders
+        renderUI(folderDiv, subFolder); // Recursive call to render subfolders
       }
 
-      for (let key in folder.buttons) {
-        const button = folder.buttons[key];
+      // Render buttons
+      for (let buttonKey in folder.buttons) {
+        const button = folder.buttons[buttonKey];
         const buttonDiv = document.createElement("div");
         buttonDiv.classList.add("button");
         const link = document.createElement("a");
@@ -81,13 +84,15 @@
       }
     }
 
-    // Parse URL query string and redirect if a valid path is provided
+    // Function to handle redirection based on query parameters
     function redirectByQuery() {
       const params = new URLSearchParams(window.location.search);
       const redirectPath = params.get("redirect");
+
       if (redirectPath) {
         const pathParts = redirectPath.split(".");
         let current = data;
+
         for (let part of pathParts) {
           if (current.folders && current.folders[part]) {
             current = current.folders[part];
@@ -102,10 +107,12 @@
       }
     }
 
-    // Render the UI and check for redirection
-    const contentDiv = document.getElementById("content");
-    renderUI(contentDiv, data);
-    redirectByQuery();
+    // Initialize the page
+    window.onload = () => {
+      const contentDiv = document.getElementById("content");
+      renderUI(contentDiv, data); // Render the UI
+      redirectByQuery(); // Check for redirection
+    };
   </script>
 </body>
 </html>
