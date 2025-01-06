@@ -108,110 +108,76 @@
       }
     };
 
-    function displaySubgroupContent(currentData, categoryPath) {
-      let contentHTML = `<div class="container mt-5">
-        <div class="card mt-4">
-          <div class="card-header">
-            <h3 class="card-title">${categoryPath.join(' / ')}</h3>
-          </div>
-          <div class="card-body">
-            <div class="row">`;
-      Object.entries(currentData).forEach(([subgroup, linkData]) => {
-        if (typeof linkData === 'object') {
-          contentHTML += `
-            <div class="col-md-6 mb-3">
-              <a href="#${categoryPath.join('.')}.${subgroup}" class="btn btn-primary w-100" onclick="navigateToSubgroup('${categoryPath.join('.')}.${subgroup}')">${subgroup}</a>
-            </div>
-          `;
-        } else {
-          contentHTML += `
-            <div class="col-md-6 mb-3">
-              <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
-            </div>
-          `;
-        }
-      });
-      contentHTML += `
-            </div>
-          </div>
-        </div>
+    function displayContent(node, path = []) {
+  let contentHTML = `<div class="container mt-5">
+    <div class="card mt-4">
+      <div class="card-header">
+        <h3 class="card-title">${path.join(" / ") || "Home"}</h3>
+      </div>
+      <div class="card-body">
+        <div class="row">`;
+
+  // Render folders
+  for (const folderId in node.folders) {
+    const folder = node.folders[folderId];
+    contentHTML += `
+      <div class="col-md-6 mb-3">
+        <a href="#${[...path, folder.id].join(".")}" class="btn btn-primary w-100" onclick="navigateToNode('${[...path, folder.id].join(".")}')">
+          ${folder.name}
+        </a>
       </div>`;
-      document.getElementById('main-content').innerHTML = contentHTML;
+  }
+
+  // Render buttons
+  for (const buttonId in node.buttons) {
+    const button = node.buttons[buttonId];
+    contentHTML += `
+      <div class="col-md-6 mb-3">
+        <a href="${button.link}" class="btn btn-success w-100" target="_blank">
+          ${button.name}
+        </a>
+      </div>`;
+  }
+
+  contentHTML += `
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById("main-content").innerHTML = contentHTML;
+}
+
+function navigateToNode(hash) {
+  const parts = hash.split(".");
+  let currentNode = data;
+  let path = [];
+
+  for (const part of parts) {
+    if (currentNode.folders[part]) {
+      currentNode = currentNode.folders[part];
+      path.push(currentNode.name);
+    } else {
+      console.error("Invalid path");
+      return;
     }
+  }
 
-    function displayInitialButtons() {
-      let buttonsHTML = '<div class="container mt-5">';
-      for (const category in data) {
-        buttonsHTML += `
-          <div class="card mt-4">
-            <div class="card-header">
-              <h3 class="card-title">${category}</h3>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                ${Object.entries(data[category]).map(([subcategory, linkData]) => {
-                  let buttonHTML = '';
-                  if (typeof linkData === 'object') {
-                    buttonHTML = `
-                      <div class="col-md-6 mb-3">
-                        <a href="#${category}.${subcategory}" class="btn btn-primary w-100" onclick="navigateToSubgroup('${category}.${subcategory}')">${subcategory}</a>
-                      </div>
-                    `;
-                  } else {
-                    buttonHTML = `
-                      <div class="col-md-6 mb-3">
-                        <a href="${linkData.link}" class="btn btn-primary w-100">${linkData.name}</a>
-                      </div>
-                    `;
-                  }
-                  return buttonHTML;
-                }).join('')}
-              </div>
-            </div>
-          </div>
-        `;
-      }
-      buttonsHTML += '</div>';
-      document.getElementById('main-content').innerHTML = buttonsHTML;
-    }
+  displayContent(currentNode, path);
+}
 
-    function navigateToSubgroup(hash) {
-      window.location.hash = `#${hash}`;
-      setTimeout(() => handleHashChange(), 0);
-    }
+function handleHashChange() {
+  const hash = window.location.hash.substring(1);
+  if (hash) {
+    navigateToNode(hash);
+  } else {
+    displayContent(data);
+  }
+}
 
-    function handleHashChange() {
-      const shortLink = window.location.hash.substring(1);
-      if (shortLink) {
-        const parts = shortLink.split('.');
-        if (parts.length >= 1) {
-          let currentData = data;
-          let categoryPath = [];
-          for (let i = 0; i < parts.length; i++) {
-            if (currentData[parts[i]]) {
-              currentData = currentData[parts[i]];
-              categoryPath.push(parts[i]);
-            } else {
-              currentData = null;
-              break;
-            }
-          }
-          if (currentData && currentData.link) {
-            window.location.href = currentData.link;
-          } else {
-            displaySubgroupContent(currentData, categoryPath);
-          }
-        }
-      } else {
-        displayInitialButtons();
-      }
-    }
+handleHashChange();
 
-    // Ensure navigation updates content on back/forward button press
-    window.addEventListener('popstate', handleHashChange);
-
-    // Load initial content
-    handleHashChange();
+window.addEventListener("hashchange", handleHashChange);
   </script>
 </body>
 </html>
