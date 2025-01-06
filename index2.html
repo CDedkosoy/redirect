@@ -9,91 +9,100 @@
       font-family: Arial, sans-serif;
       background-color: #f4f4f9;
       padding: 20px;
-    }
-    .folder, .button {
-      margin: 10px 0;
-    }
-    .folder {
-      font-weight: bold;
-      font-size: 1.2em;
+      text-align: center;
     }
     .button {
-      margin-left: 20px;
-    }
-    a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #0078d4;
+      color: white;
       text-decoration: none;
-      color: #0078d4;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .button:hover {
+      background-color: #005a9e;
     }
   </style>
 </head>
 <body>
-  <div id="content"></div>
+  <h1>Redirect Page</h1>
+  <div id="buttons"></div>
 
   <script>
-    // Define the folder and button structure
+    // Define the button and folder data structure
     const data = {
       generic: {
         id: "generic",
-        name: "Main",
-        folders: {
-          socials: {
-            id: "socials",
-            name: "Social",
-            folders: {},
-            buttons: {
-              facebook: {
-                id: "facebook",
-                name: "My Page",
-                link: "https://facebook.com/myprofile"
-              }
-            }
-          }
-        },
         buttons: {
           youtube: {
             id: "youtube",
             name: "YouTube",
             link: "https://youtube.com/@mychannelid"
           }
+        },
+        folders: {
+          socials: {
+            id: "socials",
+            buttons: {
+              facebook: {
+                id: "facebook",
+                name: "Facebook",
+                link: "https://facebook.com/myprofile"
+              }
+            }
+          }
         }
       }
     };
 
-    // Function to render folders and buttons dynamically
-    function renderUI(container, folder) {
-      // Render folders
-      for (let folderKey in folder.folders) {
-        const subFolder = folder.folders[folderKey];
-        const folderDiv = document.createElement("div");
-        folderDiv.classList.add("folder");
-        folderDiv.textContent = subFolder.name;
-        container.appendChild(folderDiv);
-        renderUI(folderDiv, subFolder); // Recursive call to render subfolders
+    // Function to create a flat list of buttons for rendering
+    function getAllButtons(folder, prefix = "") {
+      const buttons = [];
+
+      // Add buttons in the current folder
+      for (const key in folder.buttons) {
+        const button = folder.buttons[key];
+        buttons.push({
+          ...button,
+          id: `${prefix}${button.id}`
+        });
       }
 
-      // Render buttons
-      for (let buttonKey in folder.buttons) {
-        const button = folder.buttons[buttonKey];
-        const buttonDiv = document.createElement("div");
-        buttonDiv.classList.add("button");
-        const link = document.createElement("a");
-        link.href = button.link;
-        link.textContent = button.name;
-        buttonDiv.appendChild(link);
-        container.appendChild(buttonDiv);
+      // Recursively add buttons from subfolders
+      for (const key in folder.folders) {
+        const subfolder = folder.folders[key];
+        buttons.push(...getAllButtons(subfolder, `${prefix}${key}.`));
       }
+
+      return buttons;
     }
 
-    // Function to handle redirection based on query parameters
+    // Render buttons on the page
+    function renderButtons() {
+      const buttonsContainer = document.getElementById("buttons");
+      const allButtons = getAllButtons(data.generic);
+
+      allButtons.forEach((button) => {
+        const buttonElement = document.createElement("a");
+        buttonElement.href = button.link;
+        buttonElement.textContent = button.name;
+        buttonElement.className = "button";
+        buttonsContainer.appendChild(buttonElement);
+      });
+    }
+
+    // Redirect based on the query parameter
     function redirectByQuery() {
       const params = new URLSearchParams(window.location.search);
       const redirectPath = params.get("redirect");
 
       if (redirectPath) {
         const pathParts = redirectPath.split(".");
-        let current = data;
+        let current = data.generic;
 
-        for (let part of pathParts) {
+        for (const part of pathParts) {
           if (current.folders && current.folders[part]) {
             current = current.folders[part];
           } else if (current.buttons && current.buttons[part]) {
@@ -109,9 +118,8 @@
 
     // Initialize the page
     window.onload = () => {
-      const contentDiv = document.getElementById("content");
-      renderUI(contentDiv, data); // Render the UI
-      redirectByQuery(); // Check for redirection
+      renderButtons();
+      redirectByQuery();
     };
   </script>
 </body>
