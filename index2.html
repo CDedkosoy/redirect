@@ -122,6 +122,7 @@
           <div class="card-body">
             <div class="row">`;
 
+      // Render folders
       for (const folderId in node.folders) {
         const folder = node.folders[folderId];
         contentHTML += `
@@ -132,6 +133,7 @@
           </div>`;
       }
 
+      // Render buttons
       for (const buttonId in node.buttons) {
         const button = node.buttons[buttonId];
         contentHTML += `
