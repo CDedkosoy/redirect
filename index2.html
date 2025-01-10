@@ -113,7 +113,6 @@
       buttons: {}
     };
 
-    // Function to display content based on the node
     function displayContent(node, path = []) {
       let contentHTML = `<div class="container mt-5">
         <div class="card mt-4">
@@ -123,18 +122,16 @@
           <div class="card-body">
             <div class="row">`;
 
-      // Render folders
       for (const folderId in node.folders) {
         const folder = node.folders[folderId];
         contentHTML += `
           <div class="col-md-6 mb-3">
-            <a href="#${[...path, folder.id].join(".")}" class="btn btn-primary w-100" onclick="navigateToNode('${[...path, folder.id].join(".")}')">
+            <a href="#${[...path, folder.id].join(".")}" class="btn btn-primary w-100">
               ${folder.name}
             </a>
           </div>`;
       }
 
-      // Render buttons
       for (const buttonId in node.buttons) {
         const button = node.buttons[buttonId];
         contentHTML += `
@@ -154,13 +151,11 @@
       document.getElementById("main-content").innerHTML = contentHTML;
     }
 
-    // Function to navigate to a specific node (folder or button)
     function navigateToNode(hash) {
       const parts = hash.split(".");
       let currentNode = data;
       let path = [];
 
-      // Navigate down the data structure based on hash
       for (const part of parts) {
         if (currentNode.folders[part]) {
           currentNode = currentNode.folders[part];
@@ -174,7 +169,6 @@
       displayContent(currentNode, path);
     }
 
-    // Handle the page load or hash change
     function handleHashChange() {
       const hash = window.location.hash.substring(1);
       if (hash) {
@@ -184,10 +178,7 @@
       }
     }
 
-    // Run the initial content load
     handleHashChange();
-
-    // Listen for hash changes (navigation)
     window.addEventListener("hashchange", handleHashChange);
   </script>
 </body>
